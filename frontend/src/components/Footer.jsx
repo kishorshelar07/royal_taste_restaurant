@@ -70,8 +70,8 @@ export default function Footer() {
               <ul className="footer-links">
                 <li><a href="tel:+919876543210">+91 9876543210</a></li>
                 <li><a href="mailto:info@royaltaste.com">info@royaltaste.com</a></li>
-                <li><a href="#">123 MG Road, Koregaon Park</a></li>
-                <li><a href="#">Pune, Maharashtra 411001</a></li>
+                <li><span style={{color:'var(--text-muted)', fontSize:'0.83rem', display:'flex', alignItems:'center', gap:'0.6rem'}}><span style={{color:'rgba(201,168,76,0.4)', fontSize:'0.55rem'}}>—</span>123 MG Road, Koregaon Park</span></li>
+                <li><span style={{color:'var(--text-muted)', fontSize:'0.83rem', display:'flex', alignItems:'center', gap:'0.6rem'}}><span style={{color:'rgba(201,168,76,0.4)', fontSize:'0.55rem'}}>—</span>Pune, Maharashtra 411001</span></li>
               </ul>
               <Link to="/reservation" className="btn-royal btn-royal-sm mt-4 d-inline-flex">
                 <i className="fas fa-calendar-check"></i>
