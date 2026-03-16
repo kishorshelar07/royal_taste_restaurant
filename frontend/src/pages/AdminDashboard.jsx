@@ -75,7 +75,9 @@ function DashboardOverview({ stats, recentRes }) {
           ? <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>No reservations yet.</p>
           : <div style={{ overflowX: 'auto' }}>
               <table className="admin-table">
-                <thead><tr><th>Name</th><th>Guests</th><th>Date</th><th>Time</th><th>Status</th></tr></thead>
+                <thead>
+                  <tr><th>Name</th><th>Guests</th><th>Date</th><th>Time</th><th>Status</th></tr>
+                </thead>
                 <tbody>
                   {recentRes.slice(0, 6).map(r => (
                     <tr key={r._id}>
@@ -134,13 +136,14 @@ function MenuManagement({ showToast }) {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    if (!form.name || !form.price || !form.description) { showToast('Name, price and description are required.', 'error'); return; }
+    if (!form.name || !form.price || !form.description) {
+      showToast('Name, price and description are required.', 'error'); return;
+    }
     setSubmitting(true);
     try {
       const fd = new FormData();
       Object.entries(form).forEach(([k, v]) => fd.append(k, v));
       if (fileRef.current?.files[0]) fd.append('image', fileRef.current.files[0]);
-
       if (editItem) {
         await menuAPI.update(editItem._id, fd);
         showToast('Menu item updated!');
@@ -181,7 +184,6 @@ function MenuManagement({ showToast }) {
         </button>
       </div>
 
-      {/* Add / Edit Form */}
       {showForm && (
         <div className="admin-card mb-4">
           <h5 style={{ fontFamily: 'var(--font-serif)', color: 'var(--gold)', marginBottom: '1.5rem' }}>
@@ -251,7 +253,6 @@ function MenuManagement({ showToast }) {
         </div>
       )}
 
-      {/* Items Table */}
       <div className="admin-card">
         {loading
           ? <div className="text-center py-4" style={{ color: 'var(--gold)' }}><i className="fas fa-spinner fa-spin fa-2x"></i></div>
@@ -299,7 +300,7 @@ function MenuManagement({ showToast }) {
 function ReservationsManagement({ showToast }) {
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState('');
+  const [filter, setFilter]   = useState('');
 
   const load = () => {
     setLoading(true);
@@ -312,11 +313,8 @@ function ReservationsManagement({ showToast }) {
   useEffect(() => { load(); }, []);
 
   const handleStatus = async (id, status) => {
-    try {
-      await reservationAPI.updateStatus(id, status);
-      showToast(`Status updated to ${status}.`);
-      load();
-    } catch { showToast('Failed to update status.', 'error'); }
+    try { await reservationAPI.updateStatus(id, status); showToast(`Status updated to ${status}.`); load(); }
+    catch { showToast('Failed to update status.', 'error'); }
   };
 
   const handleDelete = async id => {
@@ -472,21 +470,22 @@ export default function AdminDashboard() {
   if (!isAuthenticated) return <AdminLogin />;
 
   const TABS = [
-    { id: 'dashboard',    icon: 'fa-chart-bar',      label: 'Dashboard' },
-    { id: 'menu',         icon: 'fa-utensils',        label: 'Menu Items' },
-    { id: 'reservations', icon: 'fa-calendar-check',  label: 'Reservations' },
-    { id: 'messages',     icon: 'fa-envelope',        label: 'Messages' },
+    { id: 'dashboard',    icon: 'fa-chart-bar',     label: 'Dashboard' },
+    { id: 'menu',         icon: 'fa-utensils',       label: 'Menu' },
+    { id: 'reservations', icon: 'fa-calendar-check', label: 'Bookings' },
+    { id: 'messages',     icon: 'fa-envelope',       label: 'Messages' },
   ];
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--dark)' }}>
-      {/* Top Bar */}
+
+      {/* ── TOP BAR ─────────────────────── */}
       <div className="admin-topbar">
         <div style={{ fontFamily: 'var(--font-serif)', fontSize: '1.4rem', color: 'var(--gold)' }}>
           Royal Taste <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem', fontFamily: 'var(--font-sans)' }}>— Admin</span>
         </div>
-        <div className="d-flex gap-3 align-items-center">
-          <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+        <div className="d-flex gap-2 align-items-center">
+          <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }} className="d-none d-md-inline">
             <i className="fas fa-user-shield me-1" style={{ color: 'var(--gold)' }}></i>
             {admin?.username}
           </span>
@@ -499,9 +498,11 @@ export default function AdminDashboard() {
         </div>
       </div>
 
+      {/* ── BODY ────────────────────────── */}
       <div className="d-flex">
-        {/* Sidebar */}
-        <div className="admin-sidebar">
+
+        {/* Desktop Sidebar — hidden on mobile */}
+        <div className="admin-sidebar d-none d-md-block">
           {TABS.map(tab => (
             <a
               key={tab.id}
@@ -521,7 +522,24 @@ export default function AdminDashboard() {
           {activeTab === 'reservations' && <ReservationsManagement showToast={showToast} />}
           {activeTab === 'messages'     && <MessagesManagement showToast={showToast} />}
         </div>
+
       </div>
+
+      {/* ── MOBILE BOTTOM NAV — visible only on mobile ── */}
+      <div className="admin-bottom-nav">
+        {TABS.map(tab => (
+          <a
+            key={tab.id}
+            href="#!"
+            className={activeTab === tab.id ? 'active' : ''}
+            onClick={e => { e.preventDefault(); setActiveTab(tab.id); }}
+          >
+            <i className={`fas ${tab.icon}`}></i>
+            {tab.label}
+          </a>
+        ))}
+      </div>
+
     </div>
   );
 }

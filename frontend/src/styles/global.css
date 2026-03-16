@@ -1079,3 +1079,64 @@ html, body {
   .hero-title        { font-size: 2.2rem; }
   .btn-royal         { padding: 12px 24px; font-size: 0.65rem; }
 }
+
+/* ── ADMIN MOBILE BOTTOM NAV ─────────────── */
+.admin-bottom-nav {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .admin-bottom-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--dark-2);
+    border-top: 1px solid rgba(201,168,76,0.2);
+    z-index: 999;
+    padding: 0;
+  }
+
+  .admin-bottom-nav a {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 5px;
+    font-family: var(--font-tenor);
+    font-size: 0.52rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: var(--transition-sm);
+    border-left: none;
+    gap: 4px;
+  }
+
+  .admin-bottom-nav a i {
+    font-size: 1.1rem;
+  }
+
+  .admin-bottom-nav a.active {
+    color: var(--gold);
+    background: rgba(201,168,76,0.08);
+  }
+
+  .admin-bottom-nav a:hover {
+    color: var(--gold);
+  }
+
+  .admin-main {
+    padding: 1rem;
+    padding-bottom: 80px;
+  }
+
+  .admin-topbar {
+    padding: 0.8rem 1rem;
+  }
+
+  .admin-topbar .d-flex.gap-3 span {
+    display: none;
+  }
+}
